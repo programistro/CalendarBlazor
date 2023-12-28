@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Radzen.Blazor\Radzen.Blazor.csproj" />
+    <ProjectReference Include="..\RadzenBlazorDemos\RadzenBlazorDemos.csproj" />
+<!--    <ProjectReference Include="..\RadzenBlazorDemos\RadzenBlazorDemos.csproj" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\favicon.png" />
+    <Resource Include="wwwroot\favicon.png" />
+    <Content Remove="wwwroot\favicon.ico" />
+    <Resource Include="wwwroot\favicon.ico" />
+    <Content Remove="wwwroot\css\open-iconic\font\css\open-iconic-bootstrap.min.css" />
+    <Resource Include="wwwroot\css\open-iconic\font\css\open-iconic-bootstrap.min.css" />
+    <Content Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
+    <Resource Include="wwwroot\css\bootstrap\bootstrap.min.css" />
+    <Content Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+    <Resource Include="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+    <Content Remove="wwwroot\css\site.css" />
+    <Resource Include="wwwroot\css\site.css" />
+    <Content Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.svg" />
+    <Resource Include="wwwroot\css\open-iconic\font\fonts\open-iconic.svg" />
+    <Content Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.eot" />
+    <Resource Include="wwwroot\css\open-iconic\font\fonts\open-iconic.eot" />
+    <Content Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.ttf" />
+    <Resource Include="wwwroot\css\open-iconic\font\fonts\open-iconic.ttf" />
+    <Content Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.woff" />
+    <Resource Include="wwwroot\css\open-iconic\font\fonts\open-iconic.woff" />
+    <Content Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.otf" />
+    <Resource Include="wwwroot\css\open-iconic\font\fonts\open-iconic.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <!--<ItemGroup>
+    <PackageReference Include="ElectronNET.API" Version="23.6.1" />
+  </ItemGroup>-->
+  <!--<ItemGroup>
+    <Content Update="electron.manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>-->
+</Project>

@@ -1,0 +1,103 @@
+@using BlazorApp.Calendar.Models
+@using Radzen
+@using BlazorApp.Calendar.Data
+@inject DialogService DialogService
+@inject TeacherContext dataContext
+@* @rendermode InteractiveServer *@
+
+<RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Text" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@model.Text" Name="Text" />
+            <RadzenRequiredValidator Text="Title is required" Component="Text" />
+        </div>
+    </div>
+      <div class="row" style="margin-bottom: 16px">
+            <div class="col-md-3">
+                <RadzenLabel Text="Сотрудники" />
+            </div>
+            <div class="col">
+                <RadzenListBox @bind-Value="@model.Teacher" Data="@teachers" Style="max-width: 350px; max-height: 400px;"
+                               InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select company" }})" />
+                 @* <RadzenListBox @bind-Value="@model.Teacher" Data=@teachers LoadData="@LoadData" Count="@count" AllowVirtualization="true" AllowClear="true" *@
+                 @*                   AllowFiltering="true" TextProperty="Name" Style="max-width: 200px;" *@
+                 @*                   InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Name" }})" /> *@
+                <RadzenRequiredValidator Text="Title is required" Component="Text" />
+            </div>
+        </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Начало занятия" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
+            <RadzenRequiredValidator Text="Start is required" Component="Start" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Конец занятия" />
+        </div>
+        <div class="col">
+            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" />
+            <RadzenRequiredValidator Component="End" Text="End is required" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col">
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+@code {
+    [Parameter]
+    public DateTime Start { get; set; }
+
+    [Parameter]
+    public DateTime End { get; set; }
+
+    Appointment model = new Appointment();
+    IEnumerable<string> teachers;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+         teachers = dataContext.Teachers.Select(c => c.Name).Distinct();
+    }
+
+    protected override void OnParametersSet()
+    {
+        model.Start = Start;
+        model.End = End;
+    }
+
+    void OnSubmit(Appointment model)
+    {
+        Guid id = Guid.NewGuid();
+        model.ID = id.ToString();
+        DialogService.Close(model);
+    }
+    
+    // int count;
+    //
+    // void LoadData(LoadDataArgs args)
+    // {
+    //     var query = dataContext.Teachers.AsQueryable();
+    //
+    //     if (!string.IsNullOrEmpty(args.Filter))
+    //     {
+    //         query = query.Where(c => c.Name.ToLower().Contains(args.Filter.ToLower()));
+    //     }
+    //
+    //     count = query.Count();
+    //
+    //     this.teachers = query.Skip(args.Skip.HasValue ? args.Skip.Value : 0).Take(args.Top.HasValue ? args.Top.Value : 10).ToList();
+    //
+    //     InvokeAsync(StateHasChanged);
+    // }
+}

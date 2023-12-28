@@ -1,0 +1,72 @@
+@using BlazorApp.Calendar.Models
+@using Radzen
+@using System.IO;
+@inject DialogService DialogService
+
+@* @rendermode InteractiveServer *@
+
+<RadzenTemplateForm TItem="Teacher" Data="_teacher" Submit=@OnSubmit>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="ФИО" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@_teacher.Name" Name="Text" />
+            <RadzenRequiredValidator Text="Title is required" Component="Text" />
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Должность" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@_teacher.Post" Name="Post"/>
+            <RadzenRequiredValidator Text="Title is required" Component="Text"/>
+        </div>
+    </div>
+      <div class="row" style="margin-bottom: 16px">
+            <div class="col-md-3">
+                <RadzenLabel Text="Фотография" />
+            </div>
+          <div class="col">
+                  <RadzenFileInput @bind-Value=@_teacher.PathToPhoto TValue="string" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})"/>
+              <RadzenRequiredValidator Text="Title is required" Component="Text"/>
+          </div>
+        </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col">
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Сохранить" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+@code {
+    [Parameter]
+    public string NameTeacher { get; set; }
+    
+    Teacher _teacher = new();
+    
+    protected override void OnParametersSet()
+    {
+        //_teacher.Name = NameTeacher;
+    }
+
+    void OnSubmit(Teacher model)
+    {
+        DialogService.Close(model);
+    }
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        if (e.FileCount == 0)
+        {
+            foreach (var item in e.GetMultipleFiles(0))
+            {
+                string fileName = Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(item.Name));
+                
+                await using FileStream fs = new(fileName, FileMode.Create);
+                await item.OpenReadStream(0).CopyToAsync(fs);
+            }
+        }
+    }
+}
