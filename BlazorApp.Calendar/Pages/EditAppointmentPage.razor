@@ -1,32 +1,41 @@
 @using BlazorApp.Calendar.Models
 @using Radzen
+@using BlazorApp.Calendar.Data
 @inject DialogService DialogService
+@inject TeacherContext dataContext
+@inject ClientContext clientContext
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
+     <div class="row" style="margin-bottom: 16px">
+            <div class="col-md-3">
+                <RadzenLabel Text="Клиенты"/>
+            </div>
+            <div class="col">
+                <RadzenListBox @bind-Value="@model.Client" Data="@clients" Style="max-width: 350px; max-height: 400px;"
+                               InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "select company" } })"/>
+                @* <RadzenListBox @bind-Value="@model.Teacher" Data=@teachers LoadData="@LoadData" Count="@count" AllowVirtualization="true" AllowClear="true" *@
+                @*                   AllowFiltering="true" TextProperty="Name" Style="max-width: 200px;" *@
+                @*                   InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Name" }})" /> *@
+                @* <RadzenRequiredValidator Text="Title is required" Component="Text"/> *@
+            </div>
+        </div>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Text" />
+            <RadzenLabel Text="Сотрудники"/>
         </div>
         <div class="col">
-            <RadzenTextBox @bind-Value="@model.Text" Name="Text" />
-            <RadzenRequiredValidator Text="Title is required" Component="Text" />
+            <RadzenListBox @bind-Value="@model.Teacher" Data="@teachers" Style="max-width: 350px; max-height: 400px;"
+                           InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "select company" } })"/>
+            @* <RadzenListBox @bind-Value="@model.Teacher" Data=@teachers LoadData="@LoadData" Count="@count" AllowVirtualization="true" AllowClear="true" *@
+            @*                   AllowFiltering="true" TextProperty="Name" Style="max-width: 200px;" *@
+            @*                   InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Name" }})" /> *@
+            @* <RadzenRequiredValidator Text="Title is required" Component="Text"/> *@
         </div>
     </div>
     
-    @* <div class="row" style="margin-bottom: 16px"> *@
-    @*     <div class="col-md-3"> *@
-    @*         <RadzenLabel Text="фвцвфв" /> *@
-    @*     </div> *@
-    @*     <div class="col"> *@
-    @*         <RadzenTextBox @bind-Value="@model.Text" Name="чтото" /> *@
-    @*         <RadzenRequiredValidator Text="Title awadw" Component="Text" /> *@
-    @*     </div> *@
-    @*      *@
-    @* </div> *@
-    
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Start" />
+            <RadzenLabel Text="Начало" />
         </div>
         <div class="col">
             <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
@@ -35,7 +44,7 @@
     </div>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="End" />
+            <RadzenLabel Text="Конец" />
         </div>
         <div class="col">
             <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" />
@@ -45,7 +54,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Сохранить" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -54,6 +63,16 @@
     public Appointment Appointment { get; set; }
 
     Appointment model = new Appointment();
+    IEnumerable<string> teachers;
+    IEnumerable<string> clients;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        teachers = dataContext.Teachers.Select(c => c.Name).Distinct();
+        clients = clientContext.Clients.Select(c => c.Name).Distinct();
+    }
 
     protected override void OnParametersSet()
     {
@@ -62,6 +81,7 @@
 
     void OnSubmit(Appointment model)
     {
+        model.Text = $"С {model.Client} будет заниматься {model.Teacher}";
         DialogService.Close(model);
     }
 }

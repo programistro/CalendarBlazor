@@ -11,7 +11,7 @@
             <RadzenLabel Text="ФИО" />
         </div>
         <div class="col">
-            <RadzenTextBox @bind-Value="@_teacher.Name" Name="Text" />
+            <RadzenTextBox @bind-Value="@_teacher.Name" Name="Text" AutoComplete="false"/>
             <RadzenRequiredValidator Text="Title is required" Component="Text" />
         </div>
     </div>
@@ -20,7 +20,7 @@
             <RadzenLabel Text="Должность" />
         </div>
         <div class="col">
-            <RadzenTextBox @bind-Value="@_teacher.Post" Name="Post"/>
+            <RadzenTextBox @bind-Value="@_teacher.Post" Name="Post" AutoComplete="false"/>
             <RadzenRequiredValidator Text="Title is required" Component="Text"/>
         </div>
     </div>
