@@ -49,8 +49,6 @@
 
     async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
     {
-        // console.Log($"SlotSelect: Start={args.Start} End={args.End}");
-
         if (args.View.Text != "Year")
         {
             Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Добавить",
