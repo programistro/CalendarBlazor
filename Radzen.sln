@@ -13,13 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RadzenBlazorDemos.Host", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RadzenBlazorDemos.Server", "RadzenBlazorDemos.Server\RadzenBlazorDemos.Server.csproj", "{EC869401-304A-45BC-93CA-C1CDFAAA7F7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp.Calendar", "BlazorApp.Calendar\BlazorApp.Calendar.csproj", "{2D12A2BA-628D-45BB-B000-70E8E50B2590}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp.Calendar", "BlazorApp.Calendar\BlazorApp.Calendar.csproj", "{2D12A2BA-628D-45BB-B000-70E8E50B2590}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{BBE8B602-B3D6-4264-A4FF-6EE7F4A9DCD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "TestProject\TestProject.csproj", "{BBE8B602-B3D6-4264-A4FF-6EE7F4A9DCD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBlazor", "TestBlazor\TestBlazor.csproj", "{6A8A493D-3509-4E5D-8326-7345E54A6758}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazor", "TestBlazor\TestBlazor.csproj", "{6A8A493D-3509-4E5D-8326-7345E54A6758}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp1", "BlazorApp1\BlazorApp1.csproj", "{3192E848-C361-461F-820D-FF3CDF2393C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp1", "BlazorApp1\BlazorApp1.csproj", "{3192E848-C361-461F-820D-FF3CDF2393C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,15 +1,31 @@
 using BlazorApp.Calendar.Data;
 using BlazorApp.Calendar.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using BlazorApp.Calendar.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
+
 //using ElectronNET.API;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Razor.Language.Intermediate;
-using Microsoft.EntityFrameworkCore;
 using Radzen;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+}).AddCookie(opt =>
+{
+    opt.Cookie.Name = "TryingoutGoogleOAuth";
+    opt.LoginPath = "/auth/google-singin";
+})
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -29,6 +45,12 @@ builder.Services.AddDbContextFactory<NorthwindContext>();
 builder.Services.AddDbContextFactory<TeacherContext>();
 builder.Services.AddDbContextFactory<ClientContext>();
 builder.Services.AddDbContextFactory<AppointmentContext>();
+
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+//                .AddEntityFrameworkStores<AuthDBContext>()
+//                .AddDefaultTokenProviders();
+
+
 builder.Services.AddSignalR(e => {
     e.MaximumReceiveMessageSize = 102400000;
 });
@@ -49,7 +71,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    app.MapBlazorHub();
+    app.MapFallbackToPage("/_Host");
+});
 
 await app.RunAsync();

@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Authentication.Google
+@using Microsoft.AspNetCore.Authentication
+@inject NavigationManager NavigationManager
+@page "/Login_With_Google"
+
+<button @onclick="LoginWithGoogle">Вход через Google</button>
+
+@code {
+    private async Task LoginWithGoogle()
+    {
+        var returnUrl = NavigationManager.ToAbsoluteUri(NavigationManager.Uri).ToString();
+        NavigationManager.NavigateTo($"authentication/login?scheme={GoogleDefaults.AuthenticationScheme}&returnUrl={returnUrl}");
+    }
+}

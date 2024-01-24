@@ -1,5 +1,33 @@
-﻿@page "/"
+﻿@using Microsoft.AspNetCore.Identity
+@* @inject SignInManager<IdentityUser> _signInManager *@
+@inject NavigationManager NavigationManager
 
-<p>Ежедневник</p>
+@page "/"
 
-<PageTitle>Ежедневник</PageTitle>
+<AuthorizeView>
+    <Authorized>
+
+        @* <button @onclick="Logout" class="btn btn-secondary">>Выход</button> *@
+
+        <p>Ежедневник</p>
+
+        <PageTitle>Ежедневник</PageTitle>
+
+        @foreach(var item in context.User.Claims)
+        {
+            <h3>@item.Type @item.Value @item.Properties @item.Issuer</h3>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <a href="auth/google-login" class="btn btn-secondary">Войти</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    // private async Task Logout()
+    // {
+    //     await _signInManager.SignOutAsync();
+    //     NavigationManager.NavigateTo("/"); // Перенаправление на главную страницу или на другую страницу по вашему выбору после выхода
+    // }
+}
