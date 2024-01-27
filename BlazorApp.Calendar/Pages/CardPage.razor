@@ -1,7 +1,14 @@
 @page "/teachers"
 
-<PageTitle>Сотрудники</PageTitle>
+<AuthorizeView>
+    <Authorized>
+        <PageTitle>Сотрудники</PageTitle>
 
-<RadzenExample ComponentName="Card" Example="CardVariants">
-    <CardVariants />
-</RadzenExample>
+        <RadzenExample ComponentName="Card" Example="CardVariants">
+            <CardVariants />
+        </RadzenExample>
+    </Authorized>
+    <NotAuthorized>
+        <p>Нужно авторизироваться</p>
+    </NotAuthorized>
+</AuthorizeView>

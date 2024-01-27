@@ -1,7 +1,14 @@
 @page "/clients"
 
-<PageTitle>Клиенты</PageTitle>
+<AuthorizeView>
+    <Authorized>
+        <PageTitle>Клиенты</PageTitle>
 
-<RadzenExample ComponentName="Card" Example="ClientConfig">
-    <ClientConfig />
-</RadzenExample>
+        <RadzenExample ComponentName="Card" Example="ClientConfig">
+            <ClientConfig />
+        </RadzenExample>
+    </Authorized>
+    <NotAuthorized>
+        <p>Нужно авторизироваться</p>
+    </NotAuthorized>
+</AuthorizeView>
