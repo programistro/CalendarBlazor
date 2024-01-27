@@ -5,10 +5,19 @@
 
 <button @onclick="LoginWithGoogle">Вход через Google</button>
 
-@code {
+@* <button @onclick="Logout">Выйти</button> *@
+
+
+@code 
+{
     private async Task LoginWithGoogle()
     {
         var returnUrl = NavigationManager.ToAbsoluteUri(NavigationManager.Uri).ToString();
         NavigationManager.NavigateTo($"authentication/login?scheme={GoogleDefaults.AuthenticationScheme}&returnUrl={returnUrl}");
     }
+
+    // private async Task< Logout()
+    // {
+    //     await HttpContext.SingOut();
+    // }
 }
