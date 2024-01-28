@@ -1,11 +1,14 @@
 using BlazorApp.Calendar.Data;
 using BlazorApp.Calendar.Models;
+using BlazorApp.Calendar.Provider;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BlazorApp.Calendar.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 //using ElectronNET.API;
 using Radzen;
@@ -40,8 +43,11 @@ builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<DataTeacherServices>();
 builder.Services.AddScoped<DataUpdateService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication().AddIdentityCookies();
 builder.Services.AddMemoryCache();
 builder.Services.AddDbContextFactory<NorthwindContext>();
+builder.Services.AddDbContextFactory<UserRegistersContext>();
 builder.Services.AddDbContextFactory<TeacherContext>();
 builder.Services.AddDbContextFactory<ClientContext>();
 builder.Services.AddDbContextFactory<AppointmentContext>();

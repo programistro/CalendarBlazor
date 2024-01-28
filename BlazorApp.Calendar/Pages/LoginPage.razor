@@ -1,5 +1,66 @@
-﻿<h3>LoginPage</h3>
+﻿@page "/singin"
+@using BlazorApp.Calendar.Models
+@using BlazorApp.Calendar.Data
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject UserRegistersContext UserRegistersContext
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-@code {
+<EditForm Model="@User" OnSubmit="Submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="col-xl-6 col-md-8 col-12" style="margin-top: 10px">
+        <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.Email" class="form-control dark-theme-textbox" placeholder="email address">
+    </div>
+    <br />
+    <div class="col-xl-6 col-md-8 col-12">
+        <input id="input_password" @onkeypress="OnKeyPress" type="password" @bind-value="User.Password" class="form-control dark-theme-textbox" placeholder="password">
+    </div>
+    <br />
+    <div class="col-xl-6 col-md-8 col-12 row">
+        <div class="col-xl-2 col-lg-2 col-md-6 col-sm-3 col-3">
+            <button id="button_login" type="submit" class="btn btn-primary">Login</button>
+        </div>
+        <div class="col-xl-5 col-lg-5 col-md-6 col-sm-9 col-9">
+            <a style="font-weight: bold;" href="/register">Create an account</a>
+        </div>
+    </div>
+</EditForm>
 
+@code
+{
+    private UsersRegister User = new();
+    
+    private async Task OnKeyPress(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            
+        }
+            //await AuthenticateJWT();
+    }
+    
+    private async void Submit()
+    {
+        string email = User.Email;
+        string password = User.Password;
+
+        if (IsObjectExists(User.Email))
+        {
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, User.Email) };
+            // создаем объект ClaimsIdentity
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+            // установка аутентификационных куки
+            // await AuthenticationStateProvider.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+            var user = new ClaimsPrincipal(claimsIdentity);
+            var authenticationState = new AuthenticationState(user);
+
+            await HttpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
+        }
+    }
+    public bool IsObjectExists(string inputPropertyValue)
+    {
+        return UserRegistersContext.Users.Any(e => e.Email == inputPropertyValue);
+    }
 }

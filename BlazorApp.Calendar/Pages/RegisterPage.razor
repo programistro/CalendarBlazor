@@ -1,0 +1,81 @@
+@page "/register"
+@using BlazorApp.Calendar.Models
+@using BlazorApp.Calendar.Data
+@using System.Security.Cryptography
+@using System.Text
+@inject UserRegistersContext UserRegistersContext 
+@inject NavigationManager NavigationManager
+@rendermode RenderMode.InteractiveServer
+
+<EditForm Model="@User" OnSubmit="Submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+     <div class="col-xl-6 col-md-8 col-12" style="margin-top: 10px">
+            <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.UserName" class="form-control dark-theme-textbox" placeholder="Имя">
+        </div>
+    <br/>
+    <div class="col-xl-6 col-md-8 col-12" style="margin-top: 10px">
+        <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.Email" class="form-control dark-theme-textbox" placeholder="Почта">
+    </div>
+    <br />
+    <div class="col-xl-6 col-md-8 col-12">
+        <input id="input_password" @onkeypress="OnKeyPress" type="password" @bind-value="Password" class="form-control dark-theme-textbox" placeholder="Пароль">
+    </div>
+    <br />
+    <div class="col-xl-6 col-md-8 col-12 row">
+        <div class="col-xl-2 col-lg-2 col-md-6 col-sm-3 col-3">
+            <button id="button_login" type="submit" class="btn btn-primary">Зарегистрироавться</button>
+        </div>
+    </div>
+</EditForm>
+<h3>@Message</h3>
+
+@code
+{
+    private string Message { get; set; }
+    private UsersRegister User = new();
+    
+    private string Password { get; set; }
+    
+    private async Task OnKeyPress(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            
+        }
+    }
+    
+    private void Submit()
+    {
+        using (SHA256 sha = SHA256.Create())
+        {
+            byte[] hashValue = sha.ComputeHash(Encoding.UTF8.GetBytes(Password));
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < hashValue.Length; i++)
+            {
+                builder.Append(hashValue[i].ToString("x2")); // Преобразуем байты хэша в шестнадцатеричное представление
+            }
+
+            string hash = builder.ToString();
+
+            User.Password = hash;
+            
+            if (!IsObjectExists(User.Email))
+            {
+                UserRegistersContext.Users.Add(User);
+                UserRegistersContext.SaveChanges();
+                
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                Message = "Пользователь с такой почтой уже зарегистрирован!";
+            }
+        }
+    }
+    public bool IsObjectExists(string inputPropertyValue)
+    {
+        return UserRegistersContext.Users.Any(e => e.Email == inputPropertyValue);
+    }
+}
