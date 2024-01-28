@@ -1,0 +1,27 @@
+@page "/logout"
+@using BlazorApp.Calendar.Provider
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject NavigationManager NavigationManager
+
+<p>Вы действительно хотите выйти из аккаунта?</p>
+
+<button class="btn btn-primary" onclick="@Logout" style="margin-top: 10px">Выйи</button>
+
+@code
+{
+    private async Task Logout()
+    {
+        // await HttpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        // await HttpContextAccessor.HttpContext.SignOutAsync("Identity.External"); // Clear external cookie
+        // await HttpContextAccessor.HttpContext.SignOutAsync("Identity.Application"); // Clear application cookie
+
+        // Manually clear the Google authentication cookies
+        HttpContextAccessor.HttpContext.Response.Cookies.Delete("TryingoutGoogleOAuth");
+
+        NavigationManager.NavigateTo("/");
+    }
+}

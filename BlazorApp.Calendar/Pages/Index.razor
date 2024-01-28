@@ -12,10 +12,11 @@
         <p>Ежедневник</p>
 
         <PageTitle>Ежедневник</PageTitle>
-
+        
         @foreach(var item in context.User.Claims)
         {
-            <h3>@item.Type @item.Value @item.Properties @item.Issuer</h3>
+            
+            <h3>@item.Type @item.Value @item.Properties @item.Issuer @item.OriginalIssuer</h3>
         }
     </Authorized>
     <NotAuthorized>
