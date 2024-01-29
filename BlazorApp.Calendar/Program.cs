@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 //using ElectronNET.API;
 using Radzen;
+using Microsoft.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,18 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
     options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
 });
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+}).AddCookie("LoginScheme", options =>
+        {
+            // Настройки для новой схемы аутентификации
+            options.Cookie.Name = "LoginScheme";
+            options.LoginPath = "/auth/login";
+            // ...
+        });
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -70,6 +83,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseAuthentication();
+//app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

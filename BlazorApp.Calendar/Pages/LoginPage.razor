@@ -4,8 +4,11 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
-@inject UserRegistersContext UserRegistersContext
+@using System.Security.Cryptography
+@using System.Text
+@inject UserRegistersContext dbContext
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@rendermode RenderMode.InteractiveServer
 
 <EditForm Model="@User" OnSubmit="Submit">
     <DataAnnotationsValidator />
@@ -27,20 +30,23 @@
         </div>
     </div>
 </EditForm>
+<p>@Message</p>
 
 @code
 {
+    private string Message{ get; set; }
+
     private UsersRegister User = new();
-    
+
     private async Task OnKeyPress(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
-            
+
         }
-            //await AuthenticateJWT();
+        //await AuthenticateJWT();
     }
-    
+
     private async void Submit()
     {
         string email = User.Email;
@@ -48,19 +54,62 @@
 
         if (IsObjectExists(User.Email))
         {
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, User.Email) };
-            // создаем объект ClaimsIdentity
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-            // установка аутентификационных куки
-            // await AuthenticationStateProvider.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-            var user = new ClaimsPrincipal(claimsIdentity);
-            var authenticationState = new AuthenticationState(user);
+            if (IsLoginValid(password))
+            {
+                //     var claims = new List<Claim> { new Claim(ClaimTypes.Name, User.Email) };
+                //     // создаем объект ClaimsIdentity
+                //     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                //     // установка аутентификационных куки
+                //     // await AuthenticationStateProvider.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                //     var user = new ClaimsPrincipal(claimsIdentity);
+                //     var authenticationState = new AuthenticationState(user);
 
-            await HttpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
+                //     await HttpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
+                // Создание и авторизация куки
+                var claims = new List<Claim> { new Claim(ClaimTypes.Name, User.Email) };
+
+                var identity = new ClaimsIdentity(claims, "LoginScheme");
+
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContextAccessor.HttpContext.SignInAsync("LoginScheme", principal, new AuthenticationProperties
+                    {
+                        IsPersistent = true, // Если хотите сохранить авторизацию через межсессионное время
+                        ExpiresUtc = DateTime.UtcNow.AddMinutes(360) // Установка времени истечения куки
+                    });
+
+            }
+            else
+            {
+                Message = "Не верный пароль!";
+            }
+        }
+        else
+        {
+            Message = "Пользователь не найден!";
         }
     }
     public bool IsObjectExists(string inputPropertyValue)
     {
-        return UserRegistersContext.Users.Any(e => e.Email == inputPropertyValue);
+        return dbContext.Users.Any(e => e.Email == inputPropertyValue);
+    }
+
+    public bool IsLoginValid(string password)
+    {
+        using(SHA256 sha = SHA256.Create())
+        {
+            byte[] hashValue = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < hashValue.Length; i++)
+            {
+                builder.Append(hashValue[i].ToString("x2")); // Преобразуем байты хэша в шестнадцатеричное представление
+            }
+
+            string hash = builder.ToString();
+
+            var user = dbContext.Users.FirstOrDefault(u => u.Password == hash);
+            return user != null;
+        }
     }
 }
