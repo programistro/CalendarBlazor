@@ -57,23 +57,23 @@ public class AuthController : ControllerBase
         return Redirect("/");
     }
 
-    //[HttpGet("singin")]
-    //public async Task<ActionResult> Singin()
-    //{
-    //    // создаем один claim
-    //    var claims = new List<Claim>
-    //{
-    //    new Claim(ClaimsIdentity.DefaultNameClaimType, "User")
-    //};
-    //    // создаем объект ClaimsIdentity
-    //    ClaimsIdentity id = new ClaimsIdentity(claims, "LoginScheme", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-    //    // установка аутентификационных куки
-    //    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+    [HttpGet("singin")]
+    public async Task<ActionResult> Singin(string email)
+    {
+        // создаем один claim
+        var claims = new List<Claim>
+    {
+        new Claim(ClaimsIdentity.DefaultNameClaimType, email)
+    };
+        // создаем объект ClaimsIdentity
+        ClaimsIdentity id = new ClaimsIdentity(claims, "LoginScheme", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+        // установка аутентификационных куки
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
 
-    //    var prop = new AuthenticationProperties
-    //    {
-    //        RedirectUri = "/"
-    //    };
-    //    return Redirect("/");
-    //}
+        var prop = new AuthenticationProperties
+        {
+            RedirectUri = "/"
+        };
+        return Redirect("/");
+    }
 }

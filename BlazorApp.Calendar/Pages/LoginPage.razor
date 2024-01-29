@@ -8,6 +8,7 @@
 @using System.Text
 @inject UserRegistersContext dbContext
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject NavigationManager NavigationManager
 @rendermode RenderMode.InteractiveServer
 
 <EditForm Model="@User" OnSubmit="Submit">
@@ -66,18 +67,20 @@
 
                 //     await HttpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
                 // Создание и авторизация куки
-                var claims = new List<Claim> { new Claim(ClaimTypes.Name, User.Email) };
+                // await HttpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); ;
 
-                var identity = new ClaimsIdentity(claims, "LoginScheme");
+                // var claims = new List<Claim> { new Claim(ClaimTypes.Name, User.Email) };
 
-                var principal = new ClaimsPrincipal(identity);
+                // var identity = new ClaimsIdentity(claims, "LoginScheme");
 
-                await HttpContextAccessor.HttpContext.SignInAsync("LoginScheme", principal, new AuthenticationProperties
-                    {
-                        IsPersistent = true, // Если хотите сохранить авторизацию через межсессионное время
-                        ExpiresUtc = DateTime.UtcNow.AddMinutes(360) // Установка времени истечения куки
-                    });
+                // var principal = new ClaimsPrincipal(identity);
 
+                // await HttpContextAccessor.HttpContext.SignInAsync("LoginScheme", principal, new AuthenticationProperties
+                //     {
+                //         IsPersistent = true, // Если хотите сохранить авторизацию через межсессионное время
+                //         ExpiresUtc = DateTime.UtcNow.AddMinutes(360) // Установка времени истечения куки
+                //     });
+                NavigationManager.NavigateTo($"auth/singin?email={User.Email}", true);
             }
             else
             {
@@ -96,7 +99,7 @@
 
     public bool IsLoginValid(string password)
     {
-        using(SHA256 sha = SHA256.Create())
+        using (SHA256 sha = SHA256.Create())
         {
             byte[] hashValue = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
 

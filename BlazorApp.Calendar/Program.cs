@@ -39,7 +39,7 @@ builder.Services.AddAuthentication(options =>
         {
             // Настройки для новой схемы аутентификации
             options.Cookie.Name = "LoginScheme";
-            options.LoginPath = "/auth/login";
+            options.LoginPath = "/auth/singin";
             // ...
         });
 
