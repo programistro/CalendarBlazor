@@ -1,23 +1,20 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@* @inject SignInManager<IdentityUser> _signInManager *@
 @inject NavigationManager NavigationManager
+@using BlazorApp.Calendar.Models
 
 @page "/"
 
 <AuthorizeView>
     <Authorized>
-
-        @* <button @onclick="Logout" class="btn btn-secondary">>Выход</button> *@
-
-        <p>Ежедневник</p>
+        @* <p>Ежедневник</p> *@
 
         <PageTitle>Ежедневник</PageTitle>
-        
-        @foreach(var item in context.User.Claims)
+
+       @*  @foreach(var item in context.User.Claims)
         {
             
             <h3>@item.Type @item.Value @item.Properties @item.Issuer @item.OriginalIssuer</h3>
-        }
+        } *@
     </Authorized>
     <NotAuthorized>
         <a href="auth/google-login" class="btn btn-secondary" style="margin-top = 20px">Войти</a>

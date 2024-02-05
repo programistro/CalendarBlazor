@@ -11,26 +11,48 @@
 @inject NavigationManager NavigationManager
 @rendermode RenderMode.InteractiveServer
 
-<EditForm Model="@User" OnSubmit="Submit">
+@* <EditForm Model="@User" OnSubmit="Submit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="col-xl-6 col-md-8 col-12" style="margin-top: 10px">
-        <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.Email" class="form-control dark-theme-textbox" placeholder="email address">
+        <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.Email" class="form-control dark-theme-textbox" autocomplete="off" placeholder="email">
     </div>
     <br />
     <div class="col-xl-6 col-md-8 col-12">
-        <input id="input_password" @onkeypress="OnKeyPress" type="password" @bind-value="User.Password" class="form-control dark-theme-textbox" placeholder="password">
+        <input id="input_password" @onkeypress="OnKeyPress" type="password" @bind-value="User.Password" class="form-control dark-theme-textbox" placeholder="пароль">
     </div>
     <br />
     <div class="col-xl-6 col-md-8 col-12 row">
         <div class="col-xl-2 col-lg-2 col-md-6 col-sm-3 col-3">
-            <button id="button_login" type="submit" class="btn btn-primary">Login</button>
+            <button id="button_login" type="submit" class="btn btn-primary">Войти</button>
         </div>
         <div class="col-xl-5 col-lg-5 col-md-6 col-sm-9 col-9">
-            <a style="font-weight: bold;" href="/register">Create an account</a>
+            <a style="font-weight: bold;" href="/register">Создать аккаунт</a>
         </div>
     </div>
-</EditForm>
+</EditForm> *@
+
+<div style="max-width: 800px; margin-top: -25px; margin-left: -50px;">
+    <RadzenTemplateForm TItem="@UsersRegister" Data=@User Submit=@Submit InvalidSubmit=@OnInvalidSubmit>
+        <RadzenStack Gap="1rem" Class="rz-p-sm-12">
+            <RadzenFormField Text="Email">
+                <ChildContent>
+                    <RadzenTextBox Name="Email" @bind-Value=@User.Email AutoComplete="false"/>
+                </ChildContent>
+            </RadzenFormField>
+            <RadzenFormField Text="Пароль">
+                <ChildContent>
+                    <RadzenPassword Name="Password" @bind-Value=@User.Password AutoComplete="false"/>
+                </ChildContent>
+            </RadzenFormField>
+            <div>
+                <RadzenButton ButtonType="ButtonType.Submit" Style="max-width: 90px;" Text="Войти"></RadzenButton>
+                <a style="font-weight: bold; margin-left: 12px;" href="/register">Создать аккаунт</a>
+            </div>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>
+
 <p>@Message</p>
 
 @code
@@ -45,7 +67,6 @@
         {
 
         }
-        //await AuthenticateJWT();
     }
 
     private async void Submit()
@@ -53,43 +74,27 @@
         string email = User.Email;
         string password = User.Password;
 
-        if (IsObjectExists(User.Email))
+        if(User.Email != "" || User.Email != null || User.Password != null || User.Password != "")
         {
-            if (IsLoginValid(password))
+            if (IsObjectExists(User.Email))
             {
-                //     var claims = new List<Claim> { new Claim(ClaimTypes.Name, User.Email) };
-                //     // создаем объект ClaimsIdentity
-                //     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-                //     // установка аутентификационных куки
-                //     // await AuthenticationStateProvider.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                //     var user = new ClaimsPrincipal(claimsIdentity);
-                //     var authenticationState = new AuthenticationState(user);
-
-                //     await HttpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
-                // Создание и авторизация куки
-                // await HttpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); ;
-
-                // var claims = new List<Claim> { new Claim(ClaimTypes.Name, User.Email) };
-
-                // var identity = new ClaimsIdentity(claims, "LoginScheme");
-
-                // var principal = new ClaimsPrincipal(identity);
-
-                // await HttpContextAccessor.HttpContext.SignInAsync("LoginScheme", principal, new AuthenticationProperties
-                //     {
-                //         IsPersistent = true, // Если хотите сохранить авторизацию через межсессионное время
-                //         ExpiresUtc = DateTime.UtcNow.AddMinutes(360) // Установка времени истечения куки
-                //     });
-                NavigationManager.NavigateTo($"auth/singin?email={User.Email}", true);
+                if (IsLoginValid(password))
+                {
+                    NavigationManager.NavigateTo($"auth/singin?email={User.Email}", true);
+                }
+                else
+                {
+                    Message = "Не верный пароль!";
+                }
             }
             else
             {
-                Message = "Не верный пароль!";
+                Message = "Пользователь не найден!";
             }
         }
         else
         {
-            Message = "Пользователь не найден!";
+            Message = "Поля не заполнены";
         }
     }
     public bool IsObjectExists(string inputPropertyValue)
@@ -97,8 +102,16 @@
         return dbContext.Users.Any(e => e.Email == inputPropertyValue);
     }
 
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        Message = "Не заполнены поля";
+    }
+
     public bool IsLoginValid(string password)
     {
+        if(password == "" || password == null)
+            return false;
+        
         using (SHA256 sha = SHA256.Create())
         {
             byte[] hashValue = sha.ComputeHash(Encoding.UTF8.GetBytes(password));

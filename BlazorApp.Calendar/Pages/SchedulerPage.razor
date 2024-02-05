@@ -1,34 +1,23 @@
 @page "/calendar"
 @rendermode InteractiveServer
 
+<PageTitle>РљР°Р»РµРЅРґР°СЂСЊ СЃРѕР±С‹С‚РёР№</PageTitle>
+
 <AuthorizeView>
     <Authorized>
-        <PageTitle>Календарь событий</PageTitle>
-
         <RadzenExample ComponentName="Scheduler" Example="SchedulerConfig" AdditionalSourceCodePages=@(new [] { "../Models/Appointment.cs", "AddAppointmentPage.razor", "EditAppointmentPage.razor" })>
             <SchedulerConfig />
         </RadzenExample>
         
-        @* <RadzenText Anchor="scheduler#timeline" TextStyle="TextStyle.H5" TagName="TagName.H2" class="rz-pt-12"> *@
-        @*     Year Planner and Timeline views *@
-        @* </RadzenText> *@
-        @* <RadzenText TextStyle="TextStyle.Body1" class="rz-mb-8"> *@
-        @*     Plan out the whole year with <code>&lt;RadzenYearPlannerView /&gt;</code> and <code>&lt;RadzenYearTimelineView /&gt;</code>. *@
-        @* </RadzenText> *@
-        
         <RadzenExample ComponentName="Scheduler" Example="SchedulerPlannerTimeline" AdditionalSourceCodePages=@(new [] { "../Models/Appointment.cs", "AddAppointmentPage.razor", "EditAppointmentPage.razor" })>
             <SchedulerPlannerTimeline />
         </RadzenExample>
-        
-        @* <RadzenText Anchor="scheduler#tooltips" TextStyle="TextStyle.H5" TagName="TagName.H2" class="rz-pt-12 rz-mb-6"> *@
-        @*     Display additional content when the user hovers an appointment *@
-        @* </RadzenText> *@
         
         <RadzenExample ComponentName="Scheduler" Example="SchedulerTooltips" AdditionalSourceCodePages=@(new [] { "../Models/Appointment.cs" })>
             <SchedulerTooltips />
         </RadzenExample>
     </Authorized>
     <NotAuthorized>
-        <p>Нужно авторизироваться</p>
+        <p>РќСѓР¶РЅРѕ Р°РІС‚РѕСЂРёР·РёСЂРѕРІР°С‚СЊСЃСЏ</p>
     </NotAuthorized>
 </AuthorizeView>

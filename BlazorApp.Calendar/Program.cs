@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 }).AddCookie("LoginScheme", options =>
         {
-            // Настройки для новой схемы аутентификации
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             options.Cookie.Name = "LoginScheme";
             options.LoginPath = "/auth/singin";
             // ...
@@ -65,11 +65,6 @@ builder.Services.AddDbContextFactory<TeacherContext>();
 builder.Services.AddDbContextFactory<ClientContext>();
 builder.Services.AddDbContextFactory<AppointmentContext>();
 
-//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-//                .AddEntityFrameworkStores<AuthDBContext>()
-//                .AddDefaultTokenProviders();
-
-
 builder.Services.AddSignalR(e => {
     e.MaximumReceiveMessageSize = 102400000;
 });
@@ -85,7 +80,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();
-//app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

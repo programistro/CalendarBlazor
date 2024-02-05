@@ -7,27 +7,51 @@
 @inject NavigationManager NavigationManager
 @rendermode RenderMode.InteractiveServer
 
-<EditForm Model="@User" OnSubmit="Submit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-     <div class="col-xl-6 col-md-8 col-12" style="margin-top: 10px">
-            <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.UserName" class="form-control dark-theme-textbox" placeholder="Имя">
-        </div>
-    <br/>
-    <div class="col-xl-6 col-md-8 col-12" style="margin-top: 10px">
-        <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.Email" class="form-control dark-theme-textbox" placeholder="Почта">
-    </div>
-    <br />
-    <div class="col-xl-6 col-md-8 col-12">
-        <input id="input_password" @onkeypress="OnKeyPress" type="password" @bind-value="Password" class="form-control dark-theme-textbox" placeholder="Пароль">
-    </div>
-    <br />
-    <div class="col-xl-6 col-md-8 col-12 row">
-        <div class="col-xl-2 col-lg-2 col-md-6 col-sm-3 col-3">
-            <button id="button_login" type="submit" class="btn btn-primary">Зарегистрироавться</button>
-        </div>
-    </div>
-</EditForm>
+@* <EditForm Model="@User" OnSubmit="Submit"> *@
+@*     <DataAnnotationsValidator /> *@
+@*     <ValidationSummary /> *@
+@*      <div class="col-xl-6 col-md-8 col-12" style="margin-top: 10px"> *@
+@*             <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.UserName" class="form-control dark-theme-textbox" autocomplete="off" placeholder="Имя"> *@
+@*         </div> *@
+@*     <br/> *@
+@*     <div class="col-xl-6 col-md-8 col-12" style="margin-top: 10px"> *@
+@*         <input id="input_emailaddress" @onkeypress="OnKeyPress" type="text" @bind-value="User.Email" class="form-control dark-theme-textbox" autocomplete="off" placeholder="Почта"> *@
+@*     </div> *@
+@*     <br /> *@
+@*     <div class="col-xl-6 col-md-8 col-12"> *@
+@*         <input id="input_password" @onkeypress="OnKeyPress" type="password" @bind-value="Password" class="form-control dark-theme-textbox" placeholder="Пароль"> *@
+@*     </div> *@
+@*     <br /> *@
+@*     <div class="col-xl-6 col-md-8 col-12 row"> *@
+@*         <div class="col-xl-2 col-lg-2 col-md-6 col-sm-3 col-3"> *@
+@*             <button id="button_login" type="submit" class="btn btn-primary">Зарегистрироавться</button> *@
+@*         </div> *@
+@*     </div> *@
+@* </EditForm> *@
+
+<div style="max-width: 800px; margin-top: -25px; margin-left: -50px;">
+    <RadzenTemplateForm TItem="@UsersRegister" Data=@User Submit=@Submit>
+        <RadzenStack Gap="1rem" Class="rz-p-sm-12">
+            <RadzenFormField Text="Имя">
+                <RadzenTextBox Name="Name" @bind-Value=@User.UserName AutoComplete="false"/>
+            </RadzenFormField>
+            <RadzenFormField Text="Email">
+                <ChildContent>
+                    <RadzenTextBox Name="Email" @bind-Value=@User.Email AutoComplete="false"/>
+                </ChildContent>
+            </RadzenFormField>
+            <RadzenFormField Text="Пароль">
+                <ChildContent>
+                    <RadzenPassword Name="Password" @bind-Value=@Password AutoComplete="false"/>
+                </ChildContent>
+            </RadzenFormField>
+            <div>
+                <RadzenButton ButtonType="ButtonType.Submit" Style="max-width: 220px;" Text="Зарегистрироваться"></RadzenButton>
+            </div>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>
+
 <h3>@Message</h3>
 
 @code
