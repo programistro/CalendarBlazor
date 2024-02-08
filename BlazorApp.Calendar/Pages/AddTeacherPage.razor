@@ -7,10 +7,28 @@
 <RadzenTemplateForm TItem="Teacher" Data="_teacher" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="ФИО" />
+            <RadzenLabel Text="Фамилия" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@_teacher.SurName" Name="Text" AutoComplete="false"/>
+            <RadzenRequiredValidator Text="Title is required" Component="Text" />
+        </div>
+    </div>
+     <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Имя" />
         </div>
         <div class="col">
             <RadzenTextBox @bind-Value="@_teacher.Name" Name="Text" AutoComplete="false"/>
+            <RadzenRequiredValidator Text="Title is required" Component="Text" />
+        </div>
+    </div>
+     <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Отчество" />
+        </div>
+        <div class="col">
+            <RadzenTextBox @bind-Value="@_teacher.MidleName" Name="Text" AutoComplete="false"/>
             <RadzenRequiredValidator Text="Title is required" Component="Text" />
         </div>
     </div>

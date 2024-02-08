@@ -6,6 +6,11 @@ public class Teacher
 { 
     [Key]
     public string Name { get; set; }
+
+    public string SurName { get; set; }
+
+    public string MidleName { get; set; }
+
     public string Post { get; set; }
     
     public string PathToPhoto { get; set; }
